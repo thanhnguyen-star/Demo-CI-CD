@@ -24,7 +24,7 @@ jobs:
           protocol: ftp
           port: 21
           local-dir: ./
-          server-dir: ${{ secrets.FTP_TARGET_DIR }}
+          server-dir: ./www.thanhnguyenn.somee.com/ 
           exclude: |
             **/.git*
             **/.git*/**
