@@ -1,0 +1,439 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CI/CD Pipeline Dashboard</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 30px 20px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 35px;
+}
+
+header h1 {
+    font-size: 27px;
+}
+
+header p {
+    color: #94a3b8;
+    margin-top: 8px;
+}
+
+.status {
+    background: #064e3b;
+    color: #34d399;
+    padding: 10px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.card {
+    background: #1e293b;
+    padding: 22px;
+    border-radius: 12px;
+    border: 1px solid #334155;
+}
+
+.card small {
+    color: #94a3b8;
+}
+
+.card h2 {
+    font-size: 28px;
+    margin-top: 12px;
+}
+
+.green { color: #34d399; }
+.blue { color: #60a5fa; }
+.yellow { color: #fbbf24; }
+
+.section {
+    background: #1e293b;
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    border: 1px solid #334155;
+}
+
+.section h2 {
+    font-size: 19px;
+    margin-bottom: 25px;
+}
+
+.pipeline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.stage {
+    text-align: center;
+    flex: 1;
+}
+
+.stage-icon {
+    width: 65px;
+    height: 65px;
+    margin: auto;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    font-size: 25px;
+    background: #064e3b;
+    border: 1px solid #10b981;
+}
+
+.stage h3 {
+    font-size: 14px;
+    margin: 12px 0 7px;
+}
+
+.stage small {
+    color: #34d399;
+}
+
+.arrow {
+    color: #64748b;
+    font-size: 24px;
+}
+
+button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    background: #1d4ed8;
+}
+
+button:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #334155;
+    font-size: 14px;
+}
+
+th {
+    color: #94a3b8;
+}
+
+.success {
+    color: #34d399;
+}
+
+.running {
+    color: #fbbf24;
+}
+
+.failed {
+    color: #f87171;
+}
+
+.footer {
+    color: #64748b;
+    text-align: center;
+    padding: 15px;
+    font-size: 13px;
+}
+
+@media(max-width: 750px) {
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .pipeline {
+        flex-direction: column;
+    }
+
+    .arrow {
+        transform: rotate(90deg);
+    }
+
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .section {
+        overflow-x: auto;
+    }
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<header>
+    <div>
+        <h1>CI/CD Dashboard</h1>
+        <p>AI TikTok Video Factory - Deployment System</p>
+    </div>
+    <div class="status" id="globalStatus">● SYSTEM ONLINE</div>
+</header>
+
+<div class="stats">
+    <div class="card">
+        <small>Total Deployments</small>
+        <h2 class="blue" id="total">128</h2>
+    </div>
+
+    <div class="card">
+        <small>Successful Builds</small>
+        <h2 class="green">124</h2>
+    </div>
+
+    <div class="card">
+        <small>Failed Builds</small>
+        <h2 class="yellow">4</h2>
+    </div>
+
+    <div class="card">
+        <small>Success Rate</small>
+        <h2 class="green">96.8%</h2>
+    </div>
+</div>
+
+<div class="section">
+    <h2>Pipeline Workflow</h2>
+
+    <div class="pipeline" id="pipeline">
+
+        <div class="stage">
+            <div class="stage-icon">📦</div>
+            <h3>Git Push</h3>
+            <small>Success</small>
+        </div>
+
+        <div class="arrow">→</div>
+
+        <div class="stage">
+            <div class="stage-icon">⚙️</div>
+            <h3>Build</h3>
+            <small>Success</small>
+        </div>
+
+        <div class="arrow">→</div>
+
+        <div class="stage">
+            <div class="stage-icon">🧪</div>
+            <h3>Test</h3>
+            <small>Success</small>
+        </div>
+
+        <div class="arrow">→</div>
+
+        <div class="stage">
+            <div class="stage-icon">🐳</div>
+            <h3>Docker</h3>
+            <small>Success</small>
+        </div>
+
+        <div class="arrow">→</div>
+
+        <div class="stage">
+            <div class="stage-icon">🚀</div>
+            <h3>Deploy</h3>
+            <small>Success</small>
+        </div>
+
+    </div>
+
+    <br>
+    <button onclick="runPipeline()" id="runBtn">
+        ▶ Run Pipeline
+    </button>
+    <span id="message" style="margin-left:15px;color:#94a3b8"></span>
+</div>
+
+<div class="section">
+    <h2>Deployment History</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Commit</th>
+                <th>Branch</th>
+                <th>Pipeline</th>
+                <th>Time</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody id="history">
+            <tr>
+                <td>#a81f230</td>
+                <td>main</td>
+                <td>Build #128</td>
+                <td>10:30 AM</td>
+                <td class="success">● Success</td>
+            </tr>
+            <tr>
+                <td>#b72e121</td>
+                <td>main</td>
+                <td>Build #127</td>
+                <td>09:15 AM</td>
+                <td class="success">● Success</td>
+            </tr>
+            <tr>
+                <td>#c93d441</td>
+                <td>develop</td>
+                <td>Build #126</td>
+                <td>Yesterday</td>
+                <td class="failed">● Failed</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="section">
+    <h2>Infrastructure</h2>
+    <div class="stats">
+        <div class="card">
+            <small>Source Control</small>
+            <h3 style="margin-top:12px">GitHub</h3>
+            <p class="success">● Connected</p>
+        </div>
+        <div class="card">
+            <small>CI/CD Tool</small>
+            <h3 style="margin-top:12px">GitHub Actions</h3>
+            <p class="success">● Active</p>
+        </div>
+        <div class="card">
+            <small>Container</small>
+            <h3 style="margin-top:12px">Docker</h3>
+            <p class="success">● Ready</p>
+        </div>
+        <div class="card">
+            <small>Deployment Server</small>
+            <h3 style="margin-top:12px">Production</h3>
+            <p class="success">● Online</p>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    CI/CD Dashboard Demo | AI TikTok Video Factory | 2026
+</div>
+
+</div>
+
+<script>
+const stages = [
+    "Git Push",
+    "Build",
+    "Test",
+    "Docker",
+    "Deploy"
+];
+
+let isRunning = false;
+
+async function runPipeline() {
+    if (isRunning) return;
+
+    isRunning = true;
+
+    const btn = document.getElementById("runBtn");
+    const message = document.getElementById("message");
+    const globalStatus = document.getElementById("globalStatus");
+    const stageElements = document.querySelectorAll(".stage");
+
+    btn.disabled = true;
+    globalStatus.textContent = "● PIPELINE RUNNING";
+    globalStatus.style.background = "#78350f";
+    globalStatus.style.color = "#fbbf24";
+
+    for (let i = 0; i < stages.length; i++) {
+        message.textContent = "Running: " + stages[i];
+
+        const stage = stageElements[i];
+        const icon = stage.querySelector(".stage-icon");
+        const status = stage.querySelector("small");
+
+        icon.style.background = "#78350f";
+        icon.style.borderColor = "#fbbf24";
+        status.textContent = "Running...";
+        status.className = "running";
+
+        await new Promise(resolve => setTimeout(resolve, 1200));
+
+        icon.style.background = "#064e3b";
+        icon.style.borderColor = "#10b981";
+        status.textContent = "Success";
+        status.className = "success";
+    }
+
+    document.getElementById("total").textContent =
+        Number(document.getElementById("total").textContent) + 1;
+
+    const row = document.createElement("tr");
+    row.innerHTML = `
+        <td>#demo${Date.now().toString().slice(-5)}</td>
+        <td>main</td>
+        <td>New Build</td>
+        <td>${new Date().toLocaleTimeString()}</td>
+        <td class="success">● Success</td>
+    `;
+
+    document.getElementById("history").prepend(row);
+
+    message.textContent = "Pipeline completed successfully!";
+
+    globalStatus.textContent = "● SYSTEM ONLINE";
+    globalStatus.style.background = "#064e3b";
+    globalStatus.style.color = "#34d399";
+
+    btn.disabled = false;
+    isRunning = false;
+}
+</script>
+
+</body>
+</html>
