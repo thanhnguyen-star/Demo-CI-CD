@@ -1,11 +1,9 @@
-
 name: Deploy Website to Somee
 
 on:
   push:
     branches:
       - main
-
   workflow_dispatch:
 
 jobs:
@@ -14,11 +12,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Lấy source code từ GitHub
       - name: Checkout source code
         uses: actions/checkout@v6
 
-      # 2. Deploy website lên Somee bằng FTP
       - name: Upload website to Somee
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
@@ -28,10 +24,10 @@ jobs:
           protocol: ftp
           port: 21
           local-dir: ./
-          server-dir: ./www.thanhnguyenn.somee.com/
+          server-dir: ${{ secrets.FTP_TARGET_DIR }}
           exclude: |
             **/.git*
             **/.git*/**
             **/.github/**
             **/node_modules/**
-            **/.env
+            **/.env 
